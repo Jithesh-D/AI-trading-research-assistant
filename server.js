@@ -1,8 +1,11 @@
 import express from "express";
 import cors from "cors";
+import path from "path";
+import { fileURLToPath } from "url";
 import { generateSyntheticData, runBacktest } from "./backtest.js";
 
 const app = express();
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 app.use(cors());
 app.use(express.json());
 
@@ -147,6 +150,13 @@ app.post("/api/backtest", async (req, res) => {
  */
 app.get("/health", (req, res) => {
   res.json({ status: "ok" });
+});
+
+// Serve the production Vite build after API routes.
+const distPath = path.join(__dirname, "dist");
+app.use(express.static(distPath));
+app.get("/", (req, res) => {
+  res.sendFile(path.join(distPath, "index.html"));
 });
 
 const PORT = process.env.PORT || 3001;
