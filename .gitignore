@@ -6,3 +6,4 @@ dist/
 # Documentation (keep the repository readme)
 *.md
 !README.md
+*.txt
